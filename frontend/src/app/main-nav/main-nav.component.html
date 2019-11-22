@@ -1,0 +1,33 @@
+<div> 
+    <mat-toolbar color="primary">
+      <div fxShow="true" fxHide.gt-sm="true">
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+      
+      <img src='assets/logo.png' alt='image' width="80px" height="80px" >
+      <h1><strong>&nbsp;&nbsp;LTL-Grader&nbsp;&nbsp;</strong></h1>
+      <span class="example-spacer"></span>
+      <div class="text-right" fxShow="true" fxHide.lt-md="true">
+          <a mat-button routerLink="/"> | Home |</a>
+          <a mat-button [routerLink]="'/workbench'">| Workbench |</a>
+          <a mat-button [routerLink]="'/about'">| About |</a>
+          <a mat-button [routerLink]="'/faq'">| FAQ |</a>
+      </div>
+  
+    </mat-toolbar>
+    <mat-sidenav-container fxFlexFill class="example-container">
+  
+      <mat-sidenav color="primary" #sidenav fxLayout="column" mode="over"  opened="false" fxHide.gt-sm="true">
+        <div fxLayout="column">
+            <a mat-button routerLink="/">Home</a>
+            <a mat-button [routerLink]="'/workbench'">Annotation Workbench</a>
+            <a mat-button [routerLink]="'/about'">About</a>
+            <a mat-button [routerLink]="'/faq'">FAQ</a>
+        </div>
+      </mat-sidenav>
+      <mat-sidenav-content fxFlexFill>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
