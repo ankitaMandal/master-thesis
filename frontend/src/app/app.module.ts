@@ -38,6 +38,12 @@ import { AnnotationAreaComponent } from './annotation-area/annotation-area.compo
 import { FileSelectDirective } from 'ng2-file-upload';
 import { MaterialFileUploadComponent } from './material-file-upload/material-file-upload.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { DoughnutBarChartComponent } from './doughnut-bar-chart/doughnut-bar-chart.component';
+import { ChartsModule } from 'ng2-charts';
+import { TopResultsComponent } from './top-results/top-results.component';
+import { MatchedAnswersComponent } from './matched-answers/matched-answers.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
   { path: 'about', component: AboutComponent },
@@ -56,7 +62,10 @@ const appRoutes: Routes = [
     FooterComponent,
     StepperHorizontalComponent,
     AnnotationAreaComponent,
-    MaterialFileUploadComponent
+    MaterialFileUploadComponent,
+    DoughnutBarChartComponent,
+    TopResultsComponent,
+    MatchedAnswersComponent
   ],
   imports: [
     BrowserModule,
@@ -85,6 +94,8 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+    ChartsModule,
+    DragDropModule,
     RouterModule.forRoot([
       {path: '', component: HomeComponent},
       { path: 'about', component: AboutComponent },

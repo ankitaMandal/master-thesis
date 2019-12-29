@@ -5,8 +5,5 @@
                 <p> Hi there! Welcome to <strong>LTL - Grader</strong>! This is a workbench to help you annotate, classify and score short answers by finding patterns in the data. </p><p>Please click on <strong>Upload Data</strong>  button to upload your data and start your <strong>Analysis</strong>. </p> <p>Go to  <a mat-link [routerLink]="'/about'">About</a>
                     or <a mat-link [routerLink]="'/faq'">FAQ </a> section to know more!</p>
                     <br>
-                    <!-- <input hidden type="file" #uploader
-                    (change)="uploadFile($event)"/>
-                    <button mat-raised-button color="accent" ng2FileSelect [uploader]="uploader" (onFileSelected)="onFileSelected($event)">Upload Data</button> -->
                     <app-material-file-upload (complete)="onFileComplete($event)"></app-material-file-upload>          </mat-card>
         <br><br><br><br>

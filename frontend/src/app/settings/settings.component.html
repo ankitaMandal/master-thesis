@@ -1,52 +1,40 @@
 
-<mat-card class="my-flex-mat-card" height="500px">
+<mat-card class="my-flex-mat-card" height="500px" >
     <mat-card-title>Analysis Settings
         <mat-icon>settings</mat-icon>
     </mat-card-title>
     
-  <mat-card-content>
+  <mat-card-content fxLayoutAlign="center">
 <mat-list>
   <form>
-  <mat-list-item>
-      <h3 mat-subheader>Choose Analysis Style</h3><br>
-    </mat-list-item>
-    <mat-list-item>
-    <mat-radio-group>
-              <mat-radio-button value="1">Prompt-independent</mat-radio-button> &nbsp;
-              <mat-radio-button value="2">Promptwise</mat-radio-button>
-                        </mat-radio-group>
-                        <br><br><br><br>
-  </mat-list-item>
-  <mat-divider></mat-divider>
   <mat-list-item> 
     <h3 mat-subheader>Set acceptable Morphological Variance</h3>
   </mat-list-item>
   <mat-list-item>
-    <mat-slider step="4" tickInterval="3"></mat-slider>
+    <mat-slider step="4" tickInterval="3" (input)="morphologicalVariance = $event.value" 
+      [value]="morphologicalVariance" id="morphology-slider"  min="50" max="100"></mat-slider> <span class="mat-caption">{{ morphologicalVariance}} %</span>
   </mat-list-item>
   <mat-divider></mat-divider>
   <mat-list-item> 
   <h3 mat-subheader>Set acceptable Spelling Variance</h3>
 </mat-list-item>
 <mat-list-item>
-    <mat-slider step="4" tickInterval="3"></mat-slider>
+    <mat-slider step="4" tickInterval="3" (input)="spellingVariance = $event.value" 
+      [value]="spellingVariance" id="spelling-slider" min="50" max="100"></mat-slider> <span class="mat-caption">{{ spellingVariance}} %</span>
   </mat-list-item>
   <mat-divider></mat-divider>
   <mat-list-item> 
   <h3 mat-subheader>Set acceptable Syntactical Variance</h3>
 </mat-list-item>
 <mat-list-item>
-    <mat-slider step="4" tickInterval="3"></mat-slider><br><br><br><br>
-  </mat-list-item>
-  <mat-divider></mat-divider>
-  <mat-list-item> 
-    <h3 mat-subheader>Enter Search Pattern:</h3>
-  </mat-list-item>
-    <mat-list-item> 
-    <mat-form-field>
-      <input matInput placeholder="Keyword">
-    </mat-form-field>
+    <mat-slider step="4" tickInterval="3" (input)="syntacticalVariance = $event.value" 
+      [value]="syntacticalVariance" aria-label="regular" id="syntax-slider" min="50" max="100"></mat-slider> <span class="mat-caption">{{ syntacticalVariance}} %</span>
+      <br><br>
   </mat-list-item>
 </form>
+  <mat-divider></mat-divider><br><br><br><br>
+  <mat-list-item>
+      <app-doughnut-bar-chart></app-doughnut-bar-chart>
+  </mat-list-item>
 </mat-list>
 </mat-card-content>

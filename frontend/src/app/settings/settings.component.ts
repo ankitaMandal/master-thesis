@@ -6,6 +6,9 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./settings.component.css']
 })
 export class StepperHorizontalComponent implements OnInit {
+  morphologicalVariance = 50;
+  spellingVariance=50;
+  syntacticalVariance=50;
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
