@@ -1,0 +1,27 @@
+.container {
+  background: lightyellow;
+  width: 1200px;
+  height: 500px;
+}
+
+.settings {
+  width: 250px;
+  
+  height: 500px;
+}
+
+.annotation {
+  width: 500px;
+  
+  height: 500px;
+}
+
+.labelled {
+  width: 450px;
+  
+  height: 500px;
+}
+
+.mat-slider {
+  width: 180px;
+}

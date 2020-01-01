@@ -1,0 +1,41 @@
+<!-- <cdk-virtual-scroll-viewport class="example-viewport" itemSize="60">
+  <div
+    *cdkVirtualFor="let label of labels"
+  >
+    <mat-card class="example-card">
+      <mat-card-header [style.backgroundColor]="'yellow'">
+        <mat-card-subtitle>{{label.labelName}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>
+         Your answer here..
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</cdk-virtual-scroll-viewport> -->
+<cdk-virtual-scroll-viewport class="example-viewport" itemSize="60">
+ 
+    <ng-container *cdkVirtualFor="let label of labels" fxLayoutAlign="space-around center" fxLayoutWrap>
+      
+<mat-card class="example-card" [style.borderColor]=label.color>
+  <mat-card-header [style.fontColor]=label.color>
+    <mat-card-subtitle fxLayoutAlign="center" fxLayoutWrap><strong>{{label.labelName}}</strong></mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+   
+  </mat-card-content>
+</mat-card>
+    </ng-container>
+  
+</cdk-virtual-scroll-viewport>
+
+<!-- <cdk-virtual-scroll-viewport class="example-viewport" itemSize="60">
+  <dl class="example-dl">
+    <ng-container *cdkVirtualFor="let label of labels" fxLayoutAlign="space-around center" fxLayoutWrap>
+      <dt class="example-dt">{{label.labelName}}</dt>
+      <dd class="example-dd">{{label.color}}</dd>
+    </ng-container>
+  </dl>
+</cdk-virtual-scroll-viewport> -->
+

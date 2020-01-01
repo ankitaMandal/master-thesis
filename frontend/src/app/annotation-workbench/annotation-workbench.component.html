@@ -1,0 +1,113 @@
+<br><br>
+<mat-card class="container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="1%">
+  <mat-card class="settings">
+        <mat-card-title>Analysis Settings
+          <mat-icon>settings</mat-icon>
+      </mat-card-title>
+  
+<mat-card-content  fxLayoutWrap>
+<mat-list>
+<form>
+<mat-list-item> 
+  <h3 mat-subheader>Set acceptable Morphological Variance</h3>
+</mat-list-item>
+<mat-list-item>
+  <mat-slider  step="4" tickInterval="3" (input)="morphologicalVariance = $event.value" 
+    [value]="morphologicalVariance" id="morphology-slider"  min="50" max="100"></mat-slider> <span class="mat-caption">{{ morphologicalVariance}} %</span>
+</mat-list-item>
+<mat-divider></mat-divider>
+<mat-list-item> 
+<h3 mat-subheader>Set acceptable Spelling Variance</h3>
+</mat-list-item>
+<mat-list-item>
+  <mat-slider step="4" tickInterval="3" (input)="spellingVariance = $event.value" 
+    [value]="spellingVariance" id="spelling-slider" min="50" max="100"></mat-slider> <span class="mat-caption">{{ spellingVariance}} %</span>
+</mat-list-item>
+<mat-divider></mat-divider>
+<mat-list-item> 
+<h3 mat-subheader>Set acceptable Syntactical Variance</h3>
+</mat-list-item>
+<mat-list-item>
+  <mat-slider step="4" tickInterval="3" (input)="syntacticalVariance = $event.value" 
+    [value]="syntacticalVariance" aria-label="regular" id="syntax-slider" min="50" max="100"></mat-slider> <span class="mat-caption">{{ syntacticalVariance}} %</span>
+    <br><br>
+</mat-list-item>
+</form>
+<mat-divider></mat-divider><br><br><br><br>
+<mat-list-item fxLayoutAlign="center">
+    <app-doughnut-bar-chart></app-doughnut-bar-chart>
+</mat-list-item>
+</mat-list>
+</mat-card-content></mat-card> 
+ <mat-card class="annotation">
+  <mat-card-title>Q1. Warum sind die Deutsche fett?
+  </mat-card-title>
+              <mat-card-content fxLayoutAlign="center" fxLayoutWrap>
+                <mat-list>
+                  <mat-list-item fxLayoutAlign="center">
+              <form>
+                              <div class="search-container">
+                                              <mat-form-field >
+                                                <input matInput placeholder="Enter Search Pattern*">
+                                                <button mat-icon-button matSuffix><mat-icon >search</mat-icon></button>
+                                                <button mat-icon-button matSuffix><mat-icon >clear</mat-icon></button>
+                                              </mat-form-field>
+                                            </div>
+                                      </form>
+
+                                    </mat-list-item><br><br><br><br><br><br><br><br>
+                                 <mat-list-item>
+                                  <app-answerlist></app-answerlist>
+                                 </mat-list-item><br><br><br><br><br><br><br><br>
+                                 <mat-list-item fxLayoutAlign="center">
+                                  <mat-button-toggle-group #group="matButtonToggleGroup" value="All">
+                                    <mat-button-toggle value="10">
+                                      Top 10
+                                    </mat-button-toggle>
+                                    <mat-button-toggle value="30">
+                                      Top 30
+                                    </mat-button-toggle>
+                                    <mat-button-toggle value="50">
+                                      Top 50
+                                    </mat-button-toggle>
+                                    <mat-button-toggle value="All">
+                                      All
+                                    </mat-button-toggle>
+                                  </mat-button-toggle-group>
+                        
+                                 </mat-list-item><br>
+                                 <mat-list-item fxLayoutAlign="center end">
+                                  <button mat-mini-fab color="none"><mat-icon >navigate_before</mat-icon></button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                  <button mat-mini-fab color="none"><mat-icon >navigate_next</mat-icon></button>
+                                 </mat-list-item>
+                               </mat-list>    
+                      </mat-card-content>
+ </mat-card>
+  <mat-card class="labelled">
+    <mat-card-title>Labelled Answers
+    </mat-card-title><br><br><br><br><br><br><br><br><br>
+    <mat-card-content fxLayoutAlign="center" fxLayoutWrap>
+    <mat-list>
+      <mat-list-item fxLayoutAlign="center">
+        <app-labelled-answers></app-labelled-answers>
+      </mat-list-item><br><br><br><br><br><br><br><br><br>
+      <mat-list-item fxLayoutAlign="center">
+        <button mat-button color="primary">
+          <mat-icon>add_box</mat-icon>
+          <strong>Add Label</strong>
+      </button>
+      <button mat-button color="primary">
+        <mat-icon>delete</mat-icon>
+        <strong>Delete Label</strong>
+    </button>
+      </mat-list-item>
+      <mat-list-item fxLayoutAlign="center">
+        <button mat-raised-button color="accent">
+          <mat-icon>file_download</mat-icon>
+          <strong>Download Labelled Dataset</strong>
+      </button>
+      </mat-list-item>
+    </mat-list> 
+  </mat-card-content>
+   </mat-card>
+</mat-card>

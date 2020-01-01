@@ -1,0 +1,11 @@
+.example-viewport {
+    height: 350px;
+    width: 400px;
+    border: 1px solid lightgray;
+  }
+  
+  .mat-card {
+    height: 50px;
+    width: 320px;
+    border: 8px solid;
+  }

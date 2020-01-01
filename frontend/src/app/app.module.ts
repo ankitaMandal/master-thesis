@@ -1,4 +1,4 @@
-import { WorkbenchComponent } from './workbench/workbench.component';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,22 +33,22 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatInputModule} from '@angular/material';
-import { StepperHorizontalComponent } from './settings/settings.component';
-import { AnnotationAreaComponent } from './annotation-area/annotation-area.component';
 import { FileSelectDirective } from 'ng2-file-upload';
 import { MaterialFileUploadComponent } from './material-file-upload/material-file-upload.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { DoughnutBarChartComponent } from './doughnut-bar-chart/doughnut-bar-chart.component';
 import { ChartsModule } from 'ng2-charts';
-import { TopResultsComponent } from './top-results/top-results.component';
-import { MatchedAnswersComponent } from './matched-answers/matched-answers.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { AnnotationWorkbenchComponent } from './annotation-workbench/annotation-workbench.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { AnswerlistComponent } from './answerlist/answerlist.component';
+import { LabelledAnswersComponent } from './labelled-answers/labelled-answers.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
   { path: 'about', component: AboutComponent },
   { path: 'faq',      component: FaqComponent },
-  { path: 'workbench',      component: WorkbenchComponent }]
+  { path: 'workbench',      component: AnnotationWorkbenchComponent }]
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,16 +56,14 @@ const appRoutes: Routes = [
     AboutComponent,
     MainNavComponent,
     FaqComponent,
-    WorkbenchComponent,
     HomeComponent,
     HeaderComponent,
     FooterComponent,
-    StepperHorizontalComponent,
-    AnnotationAreaComponent,
     MaterialFileUploadComponent,
     DoughnutBarChartComponent,
-    TopResultsComponent,
-    MatchedAnswersComponent
+    AnnotationWorkbenchComponent,
+    AnswerlistComponent,
+    LabelledAnswersComponent
   ],
   imports: [
     BrowserModule,
@@ -100,9 +98,10 @@ const appRoutes: Routes = [
       {path: '', component: HomeComponent},
       { path: 'about', component: AboutComponent },
       { path: 'faq',      component: FaqComponent },
-      { path: 'workbench',      component: WorkbenchComponent }
+      { path: 'workbench',      component: AnnotationWorkbenchComponent }
     ]),
-    ScrollingModule
+    ScrollingModule,
+    MatMenuModule
 
   ],
   providers: [],
