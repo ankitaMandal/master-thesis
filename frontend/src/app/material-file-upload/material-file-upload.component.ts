@@ -5,6 +5,8 @@ import { HttpClient, HttpResponse, HttpRequest,
 import { Subscription } from 'rxjs/Subscription';
 import { of } from 'rxjs/observable/of';
 import { catchError, last, map, tap } from 'rxjs/operators';
+import {Router} from "@angular/router";
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-material-file-upload',
@@ -33,7 +35,7 @@ export class MaterialFileUploadComponent implements OnInit {
 
       private files: Array<FileUploadModel> = [];
 
-      constructor(private _http: HttpClient) { }
+      constructor(private _http: HttpClient,private router: Router) { }
 
       ngOnInit() {
       }
@@ -97,15 +99,20 @@ export class MaterialFileUploadComponent implements OnInit {
             );
       }
 
-      private uploadFiles() {
+      private async uploadFiles() {
             const fileUpload = document.getElementById('fileUpload') as HTMLInputElement;
             fileUpload.value = '';
 
             this.files.forEach(file => {
                   this.uploadFile(file);
             });
+            await this.delay(3000);
+            this.router.navigate(['/workbench']);
       }
-
+      private delay(ms: number)
+      {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
       private removeFileFromArray(file: FileUploadModel) {
             const index = this.files.indexOf(file);
             if (index > -1) {

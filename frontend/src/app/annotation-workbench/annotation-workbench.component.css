@@ -1,27 +1,69 @@
 .container {
   background: lightyellow;
   width: 1200px;
-  height: 500px;
+  height: 550px;
 }
-
+.h3.mat-subheader {
+  font-size: 12px;
+}
 .settings {
   width: 250px;
   
-  height: 500px;
+  height: 550px;
 }
 
 .annotation {
-  width: 500px;
+  width: 600px;
   
-  height: 500px;
+  height: 550px;
 }
 
 .labelled {
-  width: 450px;
+  width: 350px;
   
-  height: 500px;
+  height: 550px;
 }
 
 .mat-slider {
   width: 180px;
 }
+
+.labelled-viewport {
+  height: 350px;
+  width: 320px;
+  border: 1px solid lightgray;
+}
+
+.labelled-card {
+  height: 50px;
+  width: 250px;
+  border: 8px solid;
+}
+
+.matches-viewport {
+  height: 250px;
+  width: 350px;
+  border: 2px solid darkgray;
+}
+.answers-viewport {
+  height: 100px;
+  width: 350px;
+  border: 1px solid lightgray;
+}
+.answerList {
+ 
+  display: block !important;
+  flex-wrap: wrap;
+  height: 100%;
+}
+.nonmatchList {
+  display: block !important;
+  flex-wrap: wrap;
+  height: 100%;
+  background-color: white;
+  border:  1px solid lightgray;
+}
+.labelledAnswerList{
+  flex-wrap: wrap;
+}
+

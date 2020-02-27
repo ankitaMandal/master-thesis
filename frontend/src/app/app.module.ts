@@ -39,11 +39,11 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { DoughnutBarChartComponent } from './doughnut-bar-chart/doughnut-bar-chart.component';
 import { ChartsModule } from 'ng2-charts';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import {MatChipsModule} from '@angular/material/chips';
 import { AnnotationWorkbenchComponent } from './annotation-workbench/annotation-workbench.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { AnswerlistComponent } from './answerlist/answerlist.component';
 import { LabelledAnswersComponent } from './labelled-answers/labelled-answers.component';
-
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
   { path: 'about', component: AboutComponent },
@@ -88,6 +88,7 @@ const appRoutes: Routes = [
     MatSlideToggleModule,
     MatSliderModule,
     LayoutModule,
+    MatChipsModule,
     MatToolbarModule,
     MatSidenavModule,
     MatIconModule,

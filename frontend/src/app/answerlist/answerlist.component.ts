@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import { LabelanswersService } from '../labelanswers.service';
 @Component({
   selector: 'app-answerlist',
   templateUrl: './answerlist.component.html',

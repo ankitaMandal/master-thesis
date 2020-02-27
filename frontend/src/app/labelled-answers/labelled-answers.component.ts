@@ -1,5 +1,6 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import { LabelanswersService } from '../labelanswers.service';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 /** @title Virtual scrolling `<dl>` */
 @Component({
   selector: 'app-labelled-answers',
@@ -8,6 +9,8 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LabelledAnswersComponent {
+  drop;
+  constructor(private myservice: LabelanswersService) {}
   labels = [
             {labelName:"Correct", color:"#A6C48A"}, 
              {labelName:"Partially Correct", color:"#FFBA49"},
@@ -16,4 +19,8 @@ export class LabelledAnswersComponent {
              {labelName:"Apathetic", color:"#A0D2DB"},
              {labelName:"Cry For Help", color:"#514D45"}
   ];
+  ngOnInit() {
+    
+  }
+ 
 }
