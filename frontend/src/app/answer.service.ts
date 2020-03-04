@@ -1,15 +1,28 @@
 import {Injectable} from '@angular/core';
-import {teams} from './mock-data';
-
+import { HttpClient, HttpResponse, HttpRequest, 
+  HttpEventType, HttpErrorResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs/Subscription';
+import {IAnswer} from './answer';
+import {Observable} from "rxjs/Observable";
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 @Injectable({
   providedIn: 'root'
 })
 export class AnswerService {
 
-  constructor() {
-  }
+  
+  private SERVER_URL: string = 'http://localhost:5000/';
 
-  getTeams() {
-    return teams;
+  constructor(private http: HttpClient) {
   }
+    public getCount(): Observable<IAnswer[]> {
+        return this.http.get<[IAnswer]>(this.SERVER_URL + 'getcount')
+        .catch(this.errorHandler);
+    }
+    errorHandler(error: HttpErrorResponse){
+      return Observable.throw(error.message || "Server Error");
+    }
+
 }

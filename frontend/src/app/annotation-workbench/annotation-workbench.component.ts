@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {FormBuilder, FormGroup, Validators,FormControl} from '@angular/forms';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import { AnswerService } from './../answer.service';
 @Component({
   selector: 'app-annotation-workbench',
   templateUrl: './annotation-workbench.component.html',
@@ -12,9 +13,9 @@ export class AnnotationWorkbenchComponent implements OnInit {
   hideSliders=false;
   disableMarkAs=true;
   ds = new MyDataSource();
-  morphologicalVariance = 50;
-  spellingVariance=50;
-  syntacticalVariance=50;
+  morphologicalVariance = 0;
+  spellingVariance=0;
+  syntacticalVariance=0;
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;

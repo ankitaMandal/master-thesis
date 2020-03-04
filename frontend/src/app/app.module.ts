@@ -44,6 +44,7 @@ import { AnnotationWorkbenchComponent } from './annotation-workbench/annotation-
 import { MatMenuModule } from '@angular/material/menu';
 import { AnswerlistComponent } from './answerlist/answerlist.component';
 import { LabelledAnswersComponent } from './labelled-answers/labelled-answers.component';
+import {AnswerService} from './answer.service';
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
   { path: 'about', component: AboutComponent },
@@ -105,7 +106,7 @@ const appRoutes: Routes = [
     MatMenuModule
 
   ],
-  providers: [],
+  providers: [AnswerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
