@@ -25,6 +25,7 @@ export class DoughnutBarChartComponent implements OnInit {
     this._answerService.getCount()
     .subscribe(data => {
       this.doughnutChartData=[data['unannotated'],data['annotated']]
+      console.log(data)
     },
       error => this.errorMsg = error);
   }

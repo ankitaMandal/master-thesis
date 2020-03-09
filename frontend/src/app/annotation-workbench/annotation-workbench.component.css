@@ -41,12 +41,12 @@
 }
 
 .matches-viewport {
-  height: 250px;
+  height: 170px;
   width: 350px;
   border: 2px solid darkgray;
 }
 .answers-viewport {
-  height: 100px;
+  height: 230px;
   width: 350px;
   border: 1px solid lightgray;
 }

@@ -6,7 +6,9 @@ from flask_jwt_extended import JWTManager
 import os
 import pandas as pd
 import json
+from bson.json_util import dumps
 import sys
+import csv
 import models.sentence_BERT_semantic_search,models.pos_lemma_overlap
 
 app = Flask(__name__)
@@ -19,7 +21,10 @@ app.config['JWT_SECRET_KEY'] = 'secret'
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
-
+semanticsimilarityThreshhold=0
+search_str=""
+df=pd.DataFrame()
+corpus_embeddings =[]
 CORS(app)
 
 @app.route("/upload", methods=['POST'])
@@ -39,11 +44,13 @@ def upload():
     return "success"
 
 def push_to_db():
+    global df
+    df['embeddings']=-1
     df = pd.read_excel('./files/data.xlsx', encoding='UTF-8')  # loading uploaded excel file
-    df['embeddings'] = models.sentence_BERT_semantic_search.get_corpus_embeddings(df)
+    corpus_embeddings = models.sentence_BERT_semantic_search.get_corpus_embeddings(df)
     df['pos_lemma']=models.pos_lemma_overlap.get_pos_lemmas(df)
     df['label'] = df.apply(lambda x: 0, axis=1)
-    records = json.loads(df.T.to_json()).values() # saving to json file
+    records = json.loads(df.to_json()).values() # saving to json file
     print('This is standard output', file=sys.stdout)
     result = mongo.db.answers.insert(records)
 
@@ -58,9 +65,54 @@ def annotated_answer_count():
 
 @app.route("/getanswers", methods=['GET'])
 def getanswers():
-    res = mongo.db.answers.find({'label':0}, {'Antwort':1,'Teilnehmer':1,'_id':0})
-    # teilnehmerid = mongo.db.answers.find({}, {'Teilnehmer':1,'_id':0})
-    return jsonify(res=res)
+    res = dumps(mongo.db.answers.find({'label':0}, {'Antwort':1,'Teilnehmer':1,'_id':0}))
+    return res
+
+@app.route("/getsortedanswers", methods=['GET'])
+def getsortedanswers():
+    res = dumps(mongo.db.sortedanswers.find({'label': 0}, {'Antwort': 1, 'Teilnehmer': 1, '_id': 0}))
+    return res
+
+
+
+@app.route("/poslemmaoverlap", methods=['POST'])
+def poslemmaoverlap():
+    global poslemmaThreshhold
+    poslemmaThreshhold = request.data.decode('utf-8')
+    print(poslemmaThreshhold, file=sys.stdout)
+    return "success"
+
+
+@app.route("/lexicalvariance", methods=['POST'])
+def lexicalvariance():
+    global lexicalVarianceThreshhold
+    lexicalVarianceThreshhold = request.data.decode('utf-8')
+    print(lexicalVarianceThreshhold, file=sys.stdout)
+    return "success"
+
+@app.route("/semanticsimilarity", methods=['POST'])
+def semanticsimilarity():
+    global semanticsimilarityThreshhold
+    semanticsimilarityThreshhold=request.data.decode('utf-8')
+    print(semanticsimilarityThreshhold, file=sys.stdout)
+    return "success"
+
+@app.route("/search", methods=['POST'])
+def search_pattern():
+    global search_str
+    search_str=request.data.decode('utf-8')
+    print(search_str, file=sys.stdout)
+    global df
+    global semanticsimilarityThreshhold
+    df = pd.DataFrame(list(mongo.db.answers.find()))
+    # global corpus_embeddings
+    sorted_df=models.sentence_BERT_semantic_search.sort_results(df,search_str,semanticsimilarityThreshhold)
+    records = json.loads(sorted_df.to_json()).values()
+    result = mongo.db.sortedanswers.insert(records)
+    return "success"
+
+
+
 
 if __name__ == '__main__':
 	app.run(debug=True)
