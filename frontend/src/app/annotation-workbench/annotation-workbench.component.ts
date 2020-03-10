@@ -12,6 +12,7 @@ import { IAnswer } from './../answer';
 export class AnnotationWorkbenchComponent implements OnInit {
   selectAllChecked=false;
   searchPattern ="";
+  searchPatternDist="";
   POSLemmaOverlap = 0;
   spellingVariance=0;
   semanticSimilarity=0;
@@ -51,33 +52,10 @@ export class AnnotationWorkbenchComponent implements OnInit {
      
   
   }
-  onPOSLemmaInputChange(event: any) {
-    this.POSLemmaOverlap=event.value;
-    this._answerService.postPOSLemmaSliderValue(this.POSLemmaOverlap)
-    .subscribe(poslemmaoverlap => {
-      this.POSLemmaOverlap;
-    },
-      error => this.errorMsg = error); 
-}
-onSpellingVarianceInputChange(event: any) {
-  this.spellingVariance=event.value;
-  this._answerService.postSpellingVarianceSliderValue(this.spellingVariance)
-  .subscribe(spellingvariance => {
-    this.spellingVariance;
-  },
-    error => this.errorMsg = error); 
-}
-onSemanticSimilarityInputChange(event: any) {
-  this.semanticSimilarity=event.value;
-  this._answerService.postSemanticSimilaritySliderValue(this.semanticSimilarity)
-  .subscribe(semanticsimilarity => {
-    this.semanticSimilarity;
-  },
-    error => this.errorMsg = error); 
-}
+ 
 search(value) {
   this.searchPattern=value;
-  console.log(this.searchPattern)
+  this.searchPatternDist=value.replace(' ','_')+'_dist'
   this._answerService.postSearchPattern(this.searchPattern)
   .subscribe(search => {
     this.searchPattern;
@@ -86,13 +64,12 @@ search(value) {
     this._answerService.getSortedAnswers()
     .subscribe(data => {
      this.sortedanswers = data;
-     console.log(this.sortedanswers)
     },
-      error => this.NoMatchMsg = "No matches");
-
-    
+      error => this.NoMatchMsg = "No matches");   
 }
-
+get filterBySemanticThreshold() {
+  return this.sortedanswers.filter( x => x._dist >=(this.semanticSimilarity/100));
+}
 
 
 }

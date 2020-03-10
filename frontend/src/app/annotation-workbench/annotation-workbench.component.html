@@ -54,7 +54,7 @@
                                               <mat-form-field >
                                                 <input matInput placeholder="Enter Search Pattern*" type="text" #searchPattern (keyup.enter)="search(searchPattern.value)">
                                                 <button mat-icon-button matSuffix (click)="search(searchPattern.value)"><mat-icon >search</mat-icon></button>
-                                                <button mat-icon-button matSuffix (click)="searchPattern.value=''"><mat-icon >clear</mat-icon></button>
+                                                <button mat-icon-button matSuffix (click)="searchPattern.value='';sortedanswers=[]"><mat-icon >clear</mat-icon></button>
                                               </mat-form-field>
                                             </div>
                                       </form>
@@ -67,11 +67,11 @@
                                     <mat-chip-list
                                       class="mat-chip-list-stacked"  #answerList [multiple]="true"
                                       selectable role="listbox">
-                                      <mat-chip class="answerList"  *cdkVirtualFor="let item of sortedanswers" fxLayoutWrap (click)="toggleChip(item);disableMarkAs=false;"
+                                      <mat-chip class="answerList"  *cdkVirtualFor="let item of filterBySemanticThreshold" fxLayoutWrap (click)="toggleChip(item);disableMarkAs=false;"
                                       [selected]="chips.has(item)" [value]="item" [(ngModel)]="item.checked">
                                       {{ item['Antwort'] }}&nbsp;#{{ item['Teilnehmer'] }}
                                       </mat-chip>
-                                      
+                                       
                                     </mat-chip-list>
                                     <div *ngIf="!sortedanswers || sortedanswers.length === 0"><p>&nbsp;&nbsp;{{NoMatchMsg}}</p></div>
                                   </cdk-virtual-scroll-viewport><br><br><br><br><br><br><br>

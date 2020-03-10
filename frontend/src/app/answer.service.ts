@@ -31,19 +31,6 @@ export class AnswerService {
     .catch(this.errorHandler);
 }
 
-  public postPOSLemmaSliderValue(value: number){
-    return this.http.post<any>(this.SERVER_URL + `poslemmaoverlap`, value).catch(this.errorHandler);;
-}
-
-public postSpellingVarianceSliderValue(value: number){
-  return this.http.post<any>(this.SERVER_URL + `lexicalvariance`, value).catch(this.errorHandler);;
-}
-
-public postSemanticSimilaritySliderValue(value: number){
-  return this.http.post<any>(this.SERVER_URL + `semanticsimilarity`, value).catch(this.errorHandler);;
-}
-
-
 public postSearchPattern(value: string){
   return this.http.post<any>(this.SERVER_URL + `search`, value).catch(this.errorHandler);;
 }

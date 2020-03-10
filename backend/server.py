@@ -55,10 +55,11 @@ def push_to_db():
 
 @app.route("/getcount", methods=['GET'])
 def annotated_answer_count():
-    countUnannotated= 231
-    countAnnotated =0
-    # countUnannotated = mongo.db.answers.count({'label': 0 })
-    # countAnnotated = mongo.db.answers.find({ 'label' : { "$ne": 0 } }).count()
+    # countUnannotated= 231
+    # countAnnotated =0
+
+    countUnannotated = mongo.db.answers.count({'label': 0 })
+    countAnnotated = mongo.db.answers.find({ 'label' : { "$ne": 0 } }).count()
     return jsonify(unannotated=countUnannotated,
             annotated=countAnnotated)
 
@@ -74,26 +75,6 @@ def getsortedanswers():
     # res = dumps(mongo.db.sortedanswers.find({'label': 0}, {'Antwort': 1, 'Teilnehmer': 1, '_id': 0}))
     return res
 
-@app.route("/poslemmaoverlap", methods=['POST'])
-def poslemmaoverlap():
-    global poslemmaThreshhold
-    poslemmaThreshhold = request.data.decode('utf-8')
-    print(poslemmaThreshhold, file=sys.stdout)
-    return "success"
-
-@app.route("/lexicalvariance", methods=['POST'])
-def lexicalvariance():
-    global lexicalVarianceThreshhold
-    lexicalVarianceThreshhold = request.data.decode('utf-8')
-    print(lexicalVarianceThreshhold, file=sys.stdout)
-    return "success"
-
-@app.route("/semanticsimilarity", methods=['POST'])
-def semanticsimilarity():
-    global semanticsimilarityThreshhold
-    semanticsimilarityThreshhold=request.data.decode('utf-8')
-    print(semanticsimilarityThreshhold, file=sys.stdout)
-    return "success"
 
 @app.route("/search", methods=['POST'])
 def search_pattern():
@@ -106,13 +87,8 @@ def search_pattern():
     global df
     global semanticsimilarityThreshhold
     df = pd.DataFrame(list(mongo.db.answers.find()))
-    # global corpus_embeddings
     sorted_df=models.sentence_BERT_semantic_search.sort_results(df,search_str,semanticsimilarityThreshhold)
     print(sorted_df, file=sys.stdout)
-    # with open('df.json', 'w', encoding='utf-8') as file:
-    #     sorted_df.to_json(file, force_ascii=False)
-    # records = json.loads(df.json).values()
-    # result = mongo.db.sortedanswers.insert(records)
     print('Sorted df success!!')
     return "success"
 
