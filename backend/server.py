@@ -8,7 +8,6 @@ import pandas as pd
 import json
 from bson.json_util import dumps
 import sys
-import csv
 import models.sentence_BERT_semantic_search,models.pos_lemma_overlap
 
 app = Flask(__name__)
@@ -50,7 +49,7 @@ def push_to_db():
     corpus_embeddings = models.sentence_BERT_semantic_search.get_corpus_embeddings(df)
     df['pos_lemma']=models.pos_lemma_overlap.get_pos_lemmas(df)
     df['label'] = df.apply(lambda x: 0, axis=1)
-    records = json.loads(df.to_json()).values() # saving to json file
+    records = json.loads(df.T.to_json()).values() # saving to json file
     print('This is standard output', file=sys.stdout)
     result = mongo.db.answers.insert(records)
 
@@ -70,10 +69,10 @@ def getanswers():
 
 @app.route("/getsortedanswers", methods=['GET'])
 def getsortedanswers():
-    res = dumps(mongo.db.sortedanswers.find({'label': 0}, {'Antwort': 1, 'Teilnehmer': 1, '_id': 0}))
+    df = pd.read_csv('sorted_df.csv', encoding='UTF-8',sep="\t")
+    res = df.to_json(orient="records")
+    # res = dumps(mongo.db.sortedanswers.find({'label': 0}, {'Antwort': 1, 'Teilnehmer': 1, '_id': 0}))
     return res
-
-
 
 @app.route("/poslemmaoverlap", methods=['POST'])
 def poslemmaoverlap():
@@ -81,7 +80,6 @@ def poslemmaoverlap():
     poslemmaThreshhold = request.data.decode('utf-8')
     print(poslemmaThreshhold, file=sys.stdout)
     return "success"
-
 
 @app.route("/lexicalvariance", methods=['POST'])
 def lexicalvariance():
@@ -99,6 +97,9 @@ def semanticsimilarity():
 
 @app.route("/search", methods=['POST'])
 def search_pattern():
+    # collist = mongo.db.list_collection_names()
+    # if "sortedanswers" in collist:
+    #     mongo.db.drop_collection(mongo.db.sortedanswers)
     global search_str
     search_str=request.data.decode('utf-8')
     print(search_str, file=sys.stdout)
@@ -107,12 +108,13 @@ def search_pattern():
     df = pd.DataFrame(list(mongo.db.answers.find()))
     # global corpus_embeddings
     sorted_df=models.sentence_BERT_semantic_search.sort_results(df,search_str,semanticsimilarityThreshhold)
-    records = json.loads(sorted_df.to_json()).values()
-    result = mongo.db.sortedanswers.insert(records)
+    print(sorted_df, file=sys.stdout)
+    # with open('df.json', 'w', encoding='utf-8') as file:
+    #     sorted_df.to_json(file, force_ascii=False)
+    # records = json.loads(df.json).values()
+    # result = mongo.db.sortedanswers.insert(records)
+    print('Sorted df success!!')
     return "success"
-
-
-
 
 if __name__ == '__main__':
 	app.run(debug=True)

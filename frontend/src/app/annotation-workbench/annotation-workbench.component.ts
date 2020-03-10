@@ -48,6 +48,7 @@ export class AnnotationWorkbenchComponent implements OnInit {
      console.log(this.answers)
     },
       error => this.errorMsg = error);
+     
   
   }
   onPOSLemmaInputChange(event: any) {
@@ -82,13 +83,14 @@ search(value) {
     this.searchPattern;
   },
     error => this.errorMsg = error); 
-
     this._answerService.getSortedAnswers()
     .subscribe(data => {
      this.sortedanswers = data;
      console.log(this.sortedanswers)
     },
       error => this.NoMatchMsg = "No matches");
+
+    
 }
 
 
