@@ -39,7 +39,7 @@
 </form>
 <mat-divider></mat-divider><br><br><br><br>
 <mat-list-item fxLayoutAlign="center">
-    <app-doughnut-bar-chart></app-doughnut-bar-chart>
+    <app-doughnut-bar-chart #doughnutchart></app-doughnut-bar-chart>
 </mat-list-item>
 </mat-list>
 </mat-card-content></mat-card> 
@@ -54,7 +54,7 @@
                                               <mat-form-field >
                                                 <input matInput placeholder="Enter Search Pattern*" type="text" #searchPattern (keyup.enter)="search(searchPattern.value)">
                                                 <button mat-icon-button matSuffix (click)="search(searchPattern.value)"><mat-icon >search</mat-icon></button>
-                                                <button mat-icon-button matSuffix (click)="searchPattern.value='';sortedanswers=[]"><mat-icon >clear</mat-icon></button>
+                                                <button mat-icon-button matSuffix (click)="searchPattern.value='';sortedanswers=[];selectedAnswers=[]"><mat-icon >clear</mat-icon></button>
                                               </mat-form-field>
                                             </div>
                                       </form>
@@ -67,8 +67,8 @@
                                     <mat-chip-list
                                       class="mat-chip-list-stacked"  #answerList [multiple]="true"
                                       selectable role="listbox">
-                                      <mat-chip class="answerList"  *cdkVirtualFor="let item of filterBySemanticThreshold" fxLayoutWrap (click)="toggleChip(item);disableMarkAs=false;"
-                                      [selected]="chips.has(item)" [value]="item" [(ngModel)]="item.checked">
+                                      <mat-chip class="answerList"  *cdkVirtualFor="let item of filterBySemantic" fxLayoutWrap (click)="toggleChip(item);disableMarkAs=false;selectMe(item)"
+                                      [selected]="chips.has(item)" [value]="item">
                                       {{ item['Antwort'] }}&nbsp;#{{ item['Teilnehmer'] }}
                                       </mat-chip>
                                        
@@ -83,12 +83,12 @@
                                   &nbsp;&nbsp;&nbsp;&nbsp;
                                   <button mat-raised-button [matMenuTriggerFor]="labelmenu" color="none"  [disabled]="disableMarkAs" (click)="toggleAllSelection()" matSuffix><strong>Mark As</strong><mat-icon >chevron_right</mat-icon></button>
                                   <mat-menu #labelmenu="matMenu" yPosition="below">
-                                    <button mat-menu-item>Correct</button>
-                                    <button mat-menu-item>Partially Correct</button>
-                                    <button mat-menu-item>Incorrect</button>
-                                    <button mat-menu-item>Insult</button>
-                                    <button mat-menu-item>Apathetic</button>
-                                    <button mat-menu-item>Cries For Help</button>
+                                    <button mat-menu-item (click)="markAs('Correct',answerList);doughnutchart.refresh();">Correct</button>
+                                    <button mat-menu-item (click)="markAs('Partially Correct',answerList);doughnutchart.refresh();">Partially Correct</button>
+                                    <button mat-menu-item (click)="markAs('Incorrect',answerList);doughnutchart.refresh();">Incorrect</button>
+                                    <button mat-menu-item (click)="markAs('Insult',answerList);doughnutchart.refresh();">Insult</button>
+                                    <button mat-menu-item (click)="markAs('Apathetic,answerList');doughnutchart.refresh();">Apathetic</button>
+                                    <button mat-menu-item (click)="markAs('Correct',answerList);doughnutchart.refresh();">Cries For Help</button>
                                   </mat-menu>
                                   </div>
                                 </div>
@@ -107,6 +107,7 @@
                                       <p>&nbsp;&nbsp;{{errorMsg}}</p>
                                     </mat-chip-list>
                                   </cdk-virtual-scroll-viewport>
+              
                                 
                                  </mat-list-item><br><br>
                                  <!-- <mat-list-item fxLayoutAlign="center">

@@ -4,7 +4,8 @@ import { HttpClient, HttpResponse, HttpRequest,
 import { Subscription } from 'rxjs/Subscription';
 import {IAnswer} from './answer';
 import {Observable} from "rxjs/Observable";
-import 'rxjs/add/operator/map';
+import { map} from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 @Injectable({
@@ -32,10 +33,13 @@ export class AnswerService {
 }
 
 public postSearchPattern(value: string){
-  return this.http.post<any>(this.SERVER_URL + `search`, value).catch(this.errorHandler);;
+  return this.http.post<any>(this.SERVER_URL + `search`, value).catch(this.errorHandler);
 }
 
+public postLabelledAnswers(labelledanswer): Observable<IAnswer[]> {
+  return this.http.post<any>(this.SERVER_URL + `labelanswers`,labelledanswer).catch(this.errorHandler);;
 
+}
 
     errorHandler(error: HttpErrorResponse){
       return Observable.throw(error.message || "Server Error");

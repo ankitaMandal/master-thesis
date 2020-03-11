@@ -55,9 +55,6 @@ def push_to_db():
 
 @app.route("/getcount", methods=['GET'])
 def annotated_answer_count():
-    # countUnannotated= 231
-    # countAnnotated =0
-
     countUnannotated = mongo.db.answers.count({'label': 0 })
     countAnnotated = mongo.db.answers.find({ 'label' : { "$ne": 0 } }).count()
     return jsonify(unannotated=countUnannotated,
@@ -72,24 +69,28 @@ def getanswers():
 def getsortedanswers():
     df = pd.read_csv('sorted_df.csv', encoding='UTF-8',sep="\t")
     res = df.to_json(orient="records")
-    # res = dumps(mongo.db.sortedanswers.find({'label': 0}, {'Antwort': 1, 'Teilnehmer': 1, '_id': 0}))
     return res
 
 
 @app.route("/search", methods=['POST'])
 def search_pattern():
-    # collist = mongo.db.list_collection_names()
-    # if "sortedanswers" in collist:
-    #     mongo.db.drop_collection(mongo.db.sortedanswers)
     global search_str
     search_str=request.data.decode('utf-8')
-    print(search_str, file=sys.stdout)
     global df
     global semanticsimilarityThreshhold
-    df = pd.DataFrame(list(mongo.db.answers.find()))
+    df = pd.DataFrame(list(mongo.db.answers.find({'label':0})))
     sorted_df=models.sentence_BERT_semantic_search.sort_results(df,search_str,semanticsimilarityThreshhold)
-    print(sorted_df, file=sys.stdout)
-    print('Sorted df success!!')
+    return "success"
+
+@app.route("/labelanswers", methods=['POST'])
+def label_answers():
+    req=json.loads(request.data.decode('utf-8'))
+    for item in req:
+        mongo.db.answers.update_one(
+            {"Teilnehmer": item['Teilnehmer']},
+            {"$set":
+                 {"label": item['label']
+                  }})
     return "success"
 
 if __name__ == '__main__':
