@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import { HttpClient, HttpResponse, HttpRequest, 
-  HttpEventType, HttpErrorResponse } from '@angular/common/http';
+  HttpEventType, HttpErrorResponse} from '@angular/common/http';
 import { Subscription } from 'rxjs/Subscription';
 import {IAnswer} from './answer';
 import {Observable} from "rxjs/Observable";
@@ -39,6 +39,14 @@ public postSearchPattern(value: string){
 public postLabelledAnswers(labelledanswer): Observable<IAnswer[]> {
   return this.http.post<any>(this.SERVER_URL + `labelanswers`,labelledanswer).catch(this.errorHandler);;
 
+}
+
+public getLabelledAnswers(): Observable<IAnswer[]> {
+  return this.http.get<[IAnswer]>(this.SERVER_URL + 'getlabelledanswers')
+  .catch(this.errorHandler);
+}
+public downloadFile(): Observable<any>{
+  return this.http.get(this.SERVER_URL + 'download', {responseType: 'arraybuffer'});
 }
 
     errorHandler(error: HttpErrorResponse){

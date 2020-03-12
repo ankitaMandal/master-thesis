@@ -13,6 +13,10 @@ def get_corpus_embeddings(df):
 
 def sort_results(df,search_str,semanticsimilarityThreshhold):
     import scipy.spatial
+    import contextlib
+    import os
+    with contextlib.suppress(FileNotFoundError):
+        os.remove('sorted_df.csv')
     with open('testdaf.pkl', 'rb') as pickle_file:
         corpus_embeddings = pickle.load(pickle_file)
     queries = [search_str]
@@ -28,6 +32,7 @@ def sort_results(df,search_str,semanticsimilarityThreshhold):
         for idx, distance in results[0:closest_n]:
             df.loc[idx, sortedcol] = float(1 - distance)
     sorted_df = df.sort_values(sortedcol, ascending=False)
+    sorted_df = sorted_df[sorted_df['Teilnehmer'].notna()]
     sorted_df.to_csv('sorted_df.csv', encoding='utf-8',sep="\t")
     return sorted_df
 

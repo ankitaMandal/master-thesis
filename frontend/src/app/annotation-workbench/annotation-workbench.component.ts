@@ -15,7 +15,7 @@ import swal from 'sweetalert';
   styleUrls: ['./annotation-workbench.component.css']
 })
 export class AnnotationWorkbenchComponent implements OnInit {
-  
+  file="";
   selectAllChecked=false;
   selectedLabel = "";
   searchPattern ="";
@@ -27,12 +27,12 @@ export class AnnotationWorkbenchComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   labels = [
-    {labelName:"Correct", color:"#A6C48A",answers:["Correct Dummy ans1","Correct Dummy ans 2","Correct Dummy ans3","Correct Dummy ans 4"]}, 
-     {labelName:"Partially Correct", color:"#FFBA49",answers:["PC Dummy ans1","PC Dummy ans 2","PC Dummy ans1","PC Dummy ans 2"]},
-     {labelName:"Incorrect", color:"#EF5B5B",answers:["Incorrect Dummy ans1","Incorrect Dummy ans 2","Incorrect Dummy ans1","Incorrect Dummy ans 2"]},
-     {labelName:"Insult", color:"#f4c2c2",answers:["Insult Dummy ans1","Insult Dummy ans 2"]},
-     {labelName:"Apathetic", color:"#A0D2DB",answers:["Apathetic Dummy ans1","Apathetic Dummy ans 2","Apathetic Dummy ans1","Apathetic Dummy ans 2"]},
-     {labelName:"Cry For Help", color:"#514D45",answers:["Help Dummy ans1","Help Dummy ans 2","Help Dummy ans3","Help Dummy ans 4"]}
+    {labelName:"Correct", color:"#A6C48A"}, 
+     {labelName:"Partially Correct", color:"#FFBA49"},
+     {labelName:"Incorrect", color:"#EF5B5B"},
+     {labelName:"Insult", color:"#f4c2c2"},
+     {labelName:"Apathetic", color:"#A0D2DB"},
+     {labelName:"Cry For Help", color:"#514D45"}
 ];
   constructor(private ref: ChangeDetectorRef,private _answerService : AnswerService) {}
   @ViewChild(DoughnutBarChartComponent, { static: false }) childC: DoughnutBarChartComponent;
@@ -54,14 +54,20 @@ export class AnnotationWorkbenchComponent implements OnInit {
   public NoMatchMsg="No Matches";
   public answers = [];
   public sortedanswers = [];
+  public labelledanswers = [];
   public selectedAnswers: IAnswer[]= [];
   ngOnInit() {
+    this.sortedanswers = [];
     this._answerService.getAnswers()
     .subscribe(data => {
      this.answers = data;
-     console.log(this.answers)
     },
       error => this.errorMsg = error); 
+      this._answerService.getLabelledAnswers()
+      .subscribe(data => {
+       this.labelledanswers = data;
+       console.log(this.labelledanswers)
+      }); 
   }
 onPOSLemmaInputChange(event: any) {
     this.POSLemmaOverlap=event.value; 
@@ -88,6 +94,9 @@ search(value) {
 get filterBySemantic() {
   return this.sortedanswers.filter( x => x._dist >=(this.semanticSimilarity/100));
 }
+filterByLabel(labelname) {
+  return this.labelledanswers.filter( x => x.label ===(labelname));
+}
 public selectMe(item) {
   this.selectedAnswers.push(item);
 }
@@ -105,16 +114,26 @@ markAs(pText :string,list)
     },
       error => this.errorMsg = error);
     swal("Annotated \u2713", "Selected answer(s) labelled as '"+pText+"'. Press OK to continue annotation process.");  
+    this.selectedAnswers =[];
+    this.sortedanswers =[];
     this.ngOnInit();
     this.childC.refresh();
     
   }
  
-  // masterToggle() {
-  //   this.isAllSelected() ?
-  //       this.selection.clear() :
-  //       this.dataSource.data.forEach(row => this.selection.select(row));
-  // }
+  downloadLabelledData(){
+    this._answerService.downloadFile()
+    .subscribe(data => {
+     this.file= data;
+    },
+      error => this.errorMsg);  
+      let blob = new Blob([this.file], { type: 'csv'});
+      let url = window.URL.createObjectURL(blob);
+      let pwa = window.open(url);
+      if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+          alert( 'Please disable your Pop-up blocker and try again.');
+      } 
+  }
 
 
 }

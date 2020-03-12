@@ -45,6 +45,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { AnswerlistComponent } from './answerlist/answerlist.component';
 import { LabelledAnswersComponent } from './labelled-answers/labelled-answers.component';
 import {AnswerService} from './answer.service';
+import {MatExpansionModule} from '@angular/material/expansion';
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
   { path: 'about', component: AboutComponent },
@@ -82,6 +83,7 @@ const appRoutes: Routes = [
     MatButtonToggleModule,
     MatButtonModule,
     MatCardModule,
+    MatExpansionModule,
     MatGridListModule,
     MatAutocompleteModule,
     MatRadioModule,

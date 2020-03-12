@@ -1,4 +1,4 @@
-from flask import Flask,jsonify, request
+from flask import Flask,jsonify, request,send_file
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
@@ -9,6 +9,7 @@ import json
 from bson.json_util import dumps
 import sys
 import models.sentence_BERT_semantic_search,models.pos_lemma_overlap
+import contextlib
 
 app = Flask(__name__)
 
@@ -29,6 +30,10 @@ CORS(app)
 @app.route("/upload", methods=['POST'])
 def upload():
     target = os.path.join(APP_ROOT, 'files\\')
+    with contextlib.suppress(FileNotFoundError):
+        filename = "data.xlsx"
+        destination = "\\".join([target, filename])
+        os.remove(destination)
     print(target, file=sys.stdout)
     print('This is standard output!!!!', file=sys.stdout)
     if not os.path.isdir(target):
@@ -71,14 +76,20 @@ def getsortedanswers():
     res = df.to_json(orient="records")
     return res
 
+@app.route("/getlabelledanswers", methods=['GET'])
+def getlabelledanswers():
+    res = dumps(mongo.db.answers.find({ 'label' : { "$ne": 0 }}, {'Antwort': 1,'label': 1, 'Teilnehmer': 1, '_id': 0}))
+    return res
+
 
 @app.route("/search", methods=['POST'])
 def search_pattern():
     global search_str
     search_str=request.data.decode('utf-8')
-    global df
     global semanticsimilarityThreshhold
-    df = pd.DataFrame(list(mongo.db.answers.find({'label':0})))
+    df = pd.DataFrame(list(mongo.db.answers.find({'label':0.0})))
+    print('i m sorting this')
+    print(df)
     sorted_df=models.sentence_BERT_semantic_search.sort_results(df,search_str,semanticsimilarityThreshhold)
     return "success"
 
@@ -92,6 +103,16 @@ def label_answers():
                  {"label": item['label']
                   }})
     return "success"
+
+@app.route("/download", methods=['GET'])
+def download():
+    with contextlib.suppress(FileNotFoundError):
+        os.remove('labelled_data.csv')
+    df = pd.DataFrame(list(mongo.db.answers.find({},{ 'Teilnehmer': 1,'AufgabeItem':1,'Antwort': 1,'label': 1, '_id': 0})))
+    df.to_csv('labelled_data.csv', encoding='utf-8', sep="\t")
+    return send_file('labelled_data.csv', as_attachment=True,
+                     attachment_filename='labelled_data.csv',
+                     mimetype='text/csv', )
 
 if __name__ == '__main__':
 	app.run(debug=True)
