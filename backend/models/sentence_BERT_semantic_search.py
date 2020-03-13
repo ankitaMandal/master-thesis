@@ -1,20 +1,19 @@
 import pickle
-import sys
 from sentence_transformers import SentenceTransformer
 embedder = SentenceTransformer('distiluse-base-multilingual-cased')
-
+import contextlib
+import os
 def get_corpus_embeddings(df):
     corpus = df['Antwort']
     corpus_embeddings = embedder.encode(corpus)
-    print('iiiiii', file=sys.stdout)
+    with contextlib.suppress(FileNotFoundError):
+        os.remove('testdaf.pkl')
     with open ('testdaf.pkl', 'wb') as file:
         pickle.dump(corpus_embeddings, file)
     return corpus_embeddings
 
-def sort_results(df,search_str,semanticsimilarityThreshhold):
+def sort_results(df,search_str):
     import scipy.spatial
-    import contextlib
-    import os
     with contextlib.suppress(FileNotFoundError):
         os.remove('sorted_df.csv')
     with open('testdaf.pkl', 'rb') as pickle_file:
@@ -22,6 +21,7 @@ def sort_results(df,search_str,semanticsimilarityThreshhold):
     queries = [search_str]
     sortedcol =  '_dist'
     df[sortedcol] = -1
+    print(search_str)
     query_embeddings = embedder.encode(queries)
     closest_n = df.shape[0]
     for query, query_embedding in zip(queries, query_embeddings):

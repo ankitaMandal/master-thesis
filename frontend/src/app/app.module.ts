@@ -25,6 +25,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { MatListModule } from '@angular/material/list';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { FaqComponent } from './faq/faq.component';
@@ -96,6 +97,7 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+    Ng4LoadingSpinnerModule.forRoot(),
     ChartsModule,
     DragDropModule,
     RouterModule.forRoot([

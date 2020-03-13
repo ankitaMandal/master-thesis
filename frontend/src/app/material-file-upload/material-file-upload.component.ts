@@ -7,7 +7,7 @@ import { of } from 'rxjs/observable/of';
 import { catchError, last, map, tap } from 'rxjs/operators';
 import {Router} from "@angular/router";
 import { delay } from 'rxjs/operators';
-
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 @Component({
   selector: 'app-material-file-upload',
   templateUrl: './material-file-upload.component.html',
@@ -35,7 +35,8 @@ export class MaterialFileUploadComponent implements OnInit {
 
       private files: Array<FileUploadModel> = [];
 
-      constructor(private _http: HttpClient,private router: Router) { }
+      constructor(private spinnerService: Ng4LoadingSpinnerService,
+            private _http: HttpClient,private router: Router) { }
 
       ngOnInit() {
       }
@@ -72,6 +73,7 @@ export class MaterialFileUploadComponent implements OnInit {
             });
 
             file.inProgress = true;
+            this.spinnerService.show();
             file.sub = this._http.request(req).pipe(
                   map(event => {
                         switch (event.type) {
@@ -88,12 +90,14 @@ export class MaterialFileUploadComponent implements OnInit {
                         file.inProgress = false;
                         file.canRetry = true;
                         return of(`${file.data.name} upload failed.`);
+                        this.spinnerService.hide();
                   })
             ).subscribe(
                   (event: any) => {
                         if (typeof (event) === 'object') {
                               this.removeFileFromArray(file);
                               this.complete.emit(event.body);
+                              this.spinnerService.hide();
                         }
                   }
             );

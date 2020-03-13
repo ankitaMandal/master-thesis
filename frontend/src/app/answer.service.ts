@@ -27,10 +27,10 @@ export class AnswerService {
       return this.http.get<[IAnswer]>(this.SERVER_URL + 'getanswers')
       .catch(this.errorHandler);
   }
-  public getSortedAnswers(): Observable<IAnswer[]> {
-    return this.http.get<[IAnswer]>(this.SERVER_URL + 'getsortedanswers')
-    .catch(this.errorHandler);
-}
+//   public getSortedAnswers(): Observable<IAnswer[]> {
+//     return this.http.get<[IAnswer]>(this.SERVER_URL + 'getsortedanswers')
+//     .catch(this.errorHandler);
+// }
 
 public postSearchPattern(value: string){
   return this.http.post<any>(this.SERVER_URL + `search`, value).catch(this.errorHandler);

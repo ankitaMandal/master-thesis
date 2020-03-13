@@ -8,6 +8,7 @@ import { MatListOption } from '@angular/material/list'
 import { IAnswer } from './../answer';
 import {SelectionModel} from '@angular/cdk/collections';
 import { DoughnutBarChartComponent } from '../doughnut-bar-chart/doughnut-bar-chart.component';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import swal from 'sweetalert';
 @Component({
   selector: 'app-annotation-workbench',
@@ -34,7 +35,7 @@ export class AnnotationWorkbenchComponent implements OnInit {
      {labelName:"Apathetic", color:"#A0D2DB"},
      {labelName:"Cry For Help", color:"#514D45"}
 ];
-  constructor(private ref: ChangeDetectorRef,private _answerService : AnswerService) {}
+  constructor(private spinnerService: Ng4LoadingSpinnerService,private ref: ChangeDetectorRef,private _answerService : AnswerService,) {}
   @ViewChild(DoughnutBarChartComponent, { static: false }) childC: DoughnutBarChartComponent;
   changeStatus(): void {
     setTimeout(() => {
@@ -57,6 +58,7 @@ export class AnnotationWorkbenchComponent implements OnInit {
   public labelledanswers = [];
   public selectedAnswers: IAnswer[]= [];
   ngOnInit() {
+    this.spinnerService.show();
     this.sortedanswers = [];
     this._answerService.getAnswers()
     .subscribe(data => {
@@ -79,17 +81,22 @@ onSemanticSimilarityInputChange(event: any) {
   this.semanticSimilarity=event.value; 
 }
 search(value) {
+  this.spinnerService.show();
   this.searchPattern=value;
   this.searchPatternDist=value.replace(' ','_')+'_dist'
   this._answerService.postSearchPattern(this.searchPattern)
-  .subscribe(search => {
-    this.searchPattern;
-  });
-    this._answerService.getSortedAnswers()
-    .subscribe(data => {
-     this.sortedanswers = data;
-    },
-      error => this.NoMatchMsg = "No matches");   
+  .subscribe(data => {
+    this.sortedanswers = data;
+    this.spinnerService.hide();
+  },
+    error => this.NoMatchMsg = "No matches"); 
+    // this.spinnerService.show();
+    // this._answerService.getSortedAnswers()
+    // .subscribe(data => {
+    //  this.sortedanswers = data;
+    //  this.spinnerService.hide();
+    // },
+    //   error => this.NoMatchMsg = "No matches");   
 }
 get filterBySemantic() {
   return this.sortedanswers.filter( x => x._dist >=(this.semanticSimilarity/100));

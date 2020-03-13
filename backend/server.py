@@ -21,10 +21,6 @@ app.config['JWT_SECRET_KEY'] = 'secret'
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
-semanticsimilarityThreshhold=0
-search_str=""
-df=pd.DataFrame()
-corpus_embeddings =[]
 CORS(app)
 
 @app.route("/upload", methods=['POST'])
@@ -49,7 +45,6 @@ def upload():
 
 def push_to_db():
     global df
-    df['embeddings']=-1
     df = pd.read_excel('./files/data.xlsx', encoding='UTF-8')  # loading uploaded excel file
     corpus_embeddings = models.sentence_BERT_semantic_search.get_corpus_embeddings(df)
     df['pos_lemma']=models.pos_lemma_overlap.get_pos_lemmas(df)
@@ -70,11 +65,6 @@ def getanswers():
     res = dumps(mongo.db.answers.find({'label':0}, {'Antwort':1,'Teilnehmer':1,'_id':0}))
     return res
 
-@app.route("/getsortedanswers", methods=['GET'])
-def getsortedanswers():
-    df = pd.read_csv('sorted_df.csv', encoding='UTF-8',sep="\t")
-    res = df.to_json(orient="records")
-    return res
 
 @app.route("/getlabelledanswers", methods=['GET'])
 def getlabelledanswers():
@@ -84,14 +74,12 @@ def getlabelledanswers():
 
 @app.route("/search", methods=['POST'])
 def search_pattern():
-    global search_str
     search_str=request.data.decode('utf-8')
-    global semanticsimilarityThreshhold
     df = pd.DataFrame(list(mongo.db.answers.find({'label':0.0})))
-    print('i m sorting this')
-    print(df)
-    sorted_df=models.sentence_BERT_semantic_search.sort_results(df,search_str,semanticsimilarityThreshhold)
-    return "success"
+    sorted_df=models.sentence_BERT_semantic_search.sort_results(df,search_str)
+    sorted_df = pd.read_csv('sorted_df.csv', encoding='UTF-8', sep="\t")
+    res = sorted_df.to_json(orient="records")
+    return res
 
 @app.route("/labelanswers", methods=['POST'])
 def label_answers():
