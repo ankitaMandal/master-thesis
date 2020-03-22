@@ -75,7 +75,7 @@ def getlabelledanswers():
 @app.route("/search", methods=['POST'])
 def search_pattern():
     search_str=request.data.decode('utf-8')
-    df = pd.DataFrame(list(mongo.db.answers.find({'label':0.0})))
+    df = pd.DataFrame(list(mongo.db.answers.find()))
     sorted_df=models.sentence_BERT_semantic_search.sort_results(df,search_str)
     sorted_df = pd.read_csv('sorted_df.csv', encoding='UTF-8', sep="\t")
     res = sorted_df.to_json(orient="records")

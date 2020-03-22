@@ -33,6 +33,7 @@ def sort_results(df,search_str):
             df.loc[idx, sortedcol] = float(1 - distance)
     sorted_df = df.sort_values(sortedcol, ascending=False)
     sorted_df = sorted_df[sorted_df['Teilnehmer'].notna()]
+    sorted_df = sorted_df[sorted_df['label'] == 0.0]
     sorted_df.to_csv('sorted_df.csv', encoding='utf-8',sep="\t")
     return sorted_df
 
