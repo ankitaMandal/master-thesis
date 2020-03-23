@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib. pyplot as plt
 import pandas as pd
-data = pd.read_csv('morphologicalVariance.tsv', encoding='UTF-8',sep='\t')
+data = pd.read_csv('POSLemma-Metaphone.tsv', encoding='UTF-8',sep='\t')
 df = pd.DataFrame()
 df = df.append(data)
-thresholds = df['morph_overlap']
+thresholds = df['dist']
 accuracy_list=[]
 precision_list=[]
 recall_list=[]
@@ -14,8 +14,8 @@ for threshold in thresholds:
     fp = 0
     fn = 0
     tn = 0
-    top_matches = df[df['morph_overlap'] >= threshold]
-    rest = df[df['morph_overlap'] < threshold]
+    top_matches = df[df['dist'] >= threshold]
+    rest = df[df['dist'] < threshold]
     for index, row in top_matches.iterrows():  ##iterate over top matches
         if (row['gesamt'] == 1):
             tp = tp + 1
@@ -47,8 +47,6 @@ def plot_prec_recall_vs_tresh(precisions, recalls, thresholds):
 p=np.asarray(precision_list, dtype = float)
 r=np.asarray(recall_list, dtype = float)
 t=np.asarray(thresholds, dtype = float)
-print(p.shape)
-print(r.shape)
-print(t.shape)
+print('Average Precision:',np.mean(p, dtype=np.float64))
 plot_prec_recall_vs_tresh(p ,r , t)
 plt.show()
