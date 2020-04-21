@@ -18,12 +18,12 @@
   </mat-list-item>
 <mat-divider></mat-divider>
 <mat-list-item> 
-<h3 mat-subheader>Set acceptable Spelling Variance</h3>
+<h3 mat-subheader>Set acceptable Orthographic Similarity</h3>
 </mat-list-item>
 <mat-list-item>
   <mat-slider class="example-margin slider"
-  [disabled]="disabled" step="4" tickInterval="3" (input)="onSpellingVarianceInputChange($event)" 
-    [value]="spellingVariance"   id="spelling-slider" min="0" max="100"></mat-slider> <span class="mat-caption">{{ spellingVariance}} %</span>
+  [disabled]="disabled" step="4" tickInterval="3" (input)="onSpellingSimilarityInputChange($event)" 
+    [value]="spellingSimilarity"   id="spelling-slider" min="0" max="100"></mat-slider> <span class="mat-caption">{{ spellingSimilarity}} %</span>
 </mat-list-item>
 <mat-divider></mat-divider>
 <mat-list-item> 
@@ -44,7 +44,7 @@
 </mat-list>
 </mat-card-content></mat-card> 
  <mat-card class="annotation">
-  <mat-card-title>51.1: Schulnoten: Notierien Sie für jede Person was die Person fordert und ein dazugehöriges Argument
+  <mat-card-title>51.1 Notieren Sie für jede Person was die Person fördert und ein dazugehöriges Argument. Person1 - Frau Jansson 
   </mat-card-title>
               <mat-card-content fxLayout="column" fxLayoutAlign="space-between center" fxLayoutWrap>
                 <mat-list>
@@ -67,7 +67,7 @@
                                     <mat-chip-list
                                       class="mat-chip-list-stacked"  #answerList [multiple]="true"
                                       selectable role="listbox">
-                                      <mat-chip class="answerList"  *cdkVirtualFor="let item of filterBySemantic" fxLayoutWrap (click)="toggleChip(item);disableMarkAs=false;selectMe(item)"
+                                      <mat-chip class="answerList"  *cdkVirtualFor="let item of filterAnswers" fxLayoutWrap (click)="toggleChip(item);disableMarkAs=false;selectMe(item)"
                                       [selected]="chips.has(item)" [value]="item">
                                       <div *ngIf=" item['Teilnehmer'] || item['Teilnehmer'].length>0"> {{ item['Antwort'] }}&nbsp;#{{ item['Teilnehmer'] }}</div>
                                       </mat-chip>

@@ -8,7 +8,7 @@ import pandas as pd
 import json
 from bson.json_util import dumps
 import sys
-import models.sentence_BERT_semantic_search,models.pos_lemma_overlap
+import models.sentence_BERT_semantic_search,models.pos_lemma_overlap,models.Jaro_similarity
 import contextlib
 
 app = Flask(__name__)
@@ -26,10 +26,6 @@ CORS(app)
 @app.route("/upload", methods=['POST'])
 def upload():
     target = os.path.join(APP_ROOT, 'files\\')
-    with contextlib.suppress(FileNotFoundError):
-        filename = "data.xlsx"
-        destination = "\\".join([target, filename])
-        os.remove(destination)
     print(target, file=sys.stdout)
     print('This is standard output!!!!', file=sys.stdout)
     if not os.path.isdir(target):
@@ -45,7 +41,7 @@ def upload():
 
 def push_to_db():
     global df
-    df = pd.read_excel('./files/data.xlsx', encoding='UTF-8')  # loading uploaded excel file
+    df = pd.read_excel('./files/data.xlsx', encoding='UTF-8',converters={'Antwort':str})  # loading uploaded excel file
     corpus_embeddings = models.sentence_BERT_semantic_search.get_corpus_embeddings(df)
     df['pos_lemma']=models.pos_lemma_overlap.get_pos_lemmas(df)
     df['label'] = df.apply(lambda x: 0, axis=1)
@@ -76,9 +72,14 @@ def getlabelledanswers():
 def search_pattern():
     search_str=request.data.decode('utf-8')
     df = pd.DataFrame(list(mongo.db.answers.find()))
-    sorted_df=models.sentence_BERT_semantic_search.sort_results(df,search_str)
-    sorted_df = pd.read_csv('sorted_df.csv', encoding='UTF-8', sep="\t")
-    res = sorted_df.to_json(orient="records")
+    sorted_df1=models.sentence_BERT_semantic_search.sort_results(df,search_str)
+    sorted_df2 = models.Jaro_similarity.sort_results(df, search_str)
+    sorted_df3 = models.pos_lemma_overlap.sort_results(df, search_str)
+    sorted_df1 = pd.read_csv('sorted_df.csv', encoding='UTF-8', sep="\t")
+    sorted_df2 = pd.read_csv('sorted_jaro.csv', encoding='UTF-8', sep="\t")
+    sorted_df3 = pd.read_csv('sorted_poslemma.csv', encoding='UTF-8', sep="\t")
+    merged_df=sorted_df1.merge(sorted_df2, on='Teilnehmer').merge(sorted_df3, on='Teilnehmer')
+    res = merged_df.to_json(orient="records")
     return res
 
 @app.route("/labelanswers", methods=['POST'])

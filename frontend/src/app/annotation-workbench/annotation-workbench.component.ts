@@ -22,7 +22,7 @@ export class AnnotationWorkbenchComponent implements OnInit {
   searchPattern ="";
   searchPatternDist="";
   POSLemmaOverlap = 0;
-  spellingVariance=0;
+  spellingSimilarity=0;
   semanticSimilarity=0;
   isLinear = false;
   firstFormGroup: FormGroup;
@@ -74,8 +74,8 @@ export class AnnotationWorkbenchComponent implements OnInit {
 onPOSLemmaInputChange(event: any) {
     this.POSLemmaOverlap=event.value; 
 }
-onSpellingVarianceInputChange(event: any) {
-  this.spellingVariance=event.value;
+onSpellingSimilarityInputChange(event: any) {
+  this.spellingSimilarity=event.value;
 }
 onSemanticSimilarityInputChange(event: any) {
   this.semanticSimilarity=event.value; 
@@ -98,8 +98,8 @@ search(value) {
     // },
     //   error => this.NoMatchMsg = "No matches");   
 }
-get filterBySemantic() {
-  return this.sortedanswers.filter( x => x._dist >=(this.semanticSimilarity/100));
+get filterAnswers() {
+  return this.sortedanswers.filter( x => x._cosinedist >=(this.semanticSimilarity/100) && (x => x._jarodist >=(this.spellingSimilarity/100)) && (x => x._overlap >=(this.POSLemmaOverlap/100))  );
 }
 filterByLabel(labelname) {
   return this.labelledanswers.filter( x => x.label ===(labelname));
@@ -134,7 +134,7 @@ markAs(pText :string,list)
      this.file= data;
     },
       error => this.errorMsg);  
-      let blob = new Blob([this.file], { type: 'csv'});
+      let blob = new Blob(["\ufeff",this.file], { type: 'tsv'});
       let url = window.URL.createObjectURL(blob);
       let pwa = window.open(url);
       if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {

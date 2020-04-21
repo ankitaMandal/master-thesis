@@ -14,12 +14,12 @@ def get_corpus_embeddings(df):
 
 def sort_results(df,search_str):
     import scipy.spatial
-    with contextlib.suppress(FileNotFoundError):
-        os.remove('sorted_df.csv')
+    # with contextlib.suppress(FileNotFoundError):
+    #     os.remove('sorted_df.csv')
     with open('testdaf.pkl', 'rb') as pickle_file:
         corpus_embeddings = pickle.load(pickle_file)
     queries = [search_str]
-    sortedcol =  '_dist'
+    sortedcol =  '_cosinedist'
     df[sortedcol] = -1
     print(search_str)
     query_embeddings = embedder.encode(queries)

@@ -1,7 +1,7 @@
 .container {
   background: lightyellow;
   width: 1200px;
-  height: 550px;
+  height: 560px;
 }
 .h3.mat-subheader {
   font-size: 12px;
@@ -9,19 +9,19 @@
 .settings {
   width: 250px;
   
-  height: 550px;
+  height: 560px;
 }
 
 .annotation {
   width: 600px;
   
-  height: 550px;
+  height: 560px;
 }
 
 .labelled {
   width: 350px;
   
-  height: 550px;
+  height: 560px;
 }
 
 .mat-slider {
