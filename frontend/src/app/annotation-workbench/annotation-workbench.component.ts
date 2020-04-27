@@ -1,12 +1,8 @@
 
 import {ChangeDetectionStrategy,ChangeDetectorRef, Component, OnInit,ViewChild} from '@angular/core';
-import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {FormBuilder, FormGroup, Validators,FormControl} from '@angular/forms';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import { AnswerService } from './../answer.service';
-import { MatListOption } from '@angular/material/list'
 import { IAnswer } from './../answer';
-import {SelectionModel} from '@angular/cdk/collections';
 import { DoughnutBarChartComponent } from '../doughnut-bar-chart/doughnut-bar-chart.component';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import swal from 'sweetalert';
@@ -16,6 +12,7 @@ import swal from 'sweetalert';
   styleUrls: ['./annotation-workbench.component.css']
 })
 export class AnnotationWorkbenchComponent implements OnInit {
+  
   file="";
   selectAllChecked=false;
   selectedLabel = "";
@@ -48,6 +45,7 @@ export class AnnotationWorkbenchComponent implements OnInit {
     const removeChip = () => { this.chips.delete(chip); };
 
     this.chips.has(chip) ? removeChip() : addChip();
+    this.selectAllChecked=false;
   }
 
   get chips() { return this.chipControl.value; }
@@ -55,9 +53,12 @@ export class AnnotationWorkbenchComponent implements OnInit {
   public NoMatchMsg="No Matches";
   public answers = [];
   public sortedanswers = [];
+  public answerChipList = [];
   public labelledanswers = [];
   public selectedAnswers: IAnswer[]= [];
   ngOnInit() {
+    this.selectAllChecked=false;
+
     this.spinnerService.show();
     this.sortedanswers = [];
     this._answerService.getAnswers()
@@ -89,17 +90,10 @@ search(value) {
     this.sortedanswers = data;
     this.spinnerService.hide();
   },
-    error => this.NoMatchMsg = "No matches"); 
-    // this.spinnerService.show();
-    // this._answerService.getSortedAnswers()
-    // .subscribe(data => {
-    //  this.sortedanswers = data;
-    //  this.spinnerService.hide();
-    // },
-    //   error => this.NoMatchMsg = "No matches");   
+    error => this.NoMatchMsg = "No matches");  
 }
 get filterAnswers() {
-  return this.sortedanswers.filter( x => x._cosinedist >=(this.semanticSimilarity/100) && (x => x._jarodist >=(this.spellingSimilarity/100)) && (x => x._overlap >=(this.POSLemmaOverlap/100))  );
+  return this.sortedanswers.filter( x => x._cosinedist >=(this.semanticSimilarity/100) &&  x._jarodist >=(this.spellingSimilarity/100) && x._overlap >=(this.POSLemmaOverlap/100));
 }
 filterByLabel(labelname) {
   return this.labelledanswers.filter( x => x.label ===(labelname));
@@ -142,7 +136,22 @@ markAs(pText :string,list)
       } 
   }
 
-
+  public updateCheck(){
+    console.log(this.selectAllChecked);
+    console.log( this.answerChipList);
+    if(this.selectAllChecked === true){
+      console.log( this.filterAnswers);
+      this.filterAnswers.forEach(element => {
+        this.toggleChip(element);this.selectMe(element);
+      });
+      
+    }else { console.log( this.answerChipList);
+      this.filterAnswers.forEach((element,index)=> {
+        this.toggleChip(element);
+        this.selectedAnswers.splice(index,1);
+      });
+    }
+  }
 }
 
 

@@ -78,8 +78,9 @@ def search_pattern():
     sorted_df1 = pd.read_csv('sorted_df.csv', encoding='UTF-8', sep="\t")
     sorted_df2 = pd.read_csv('sorted_jaro.csv', encoding='UTF-8', sep="\t")
     sorted_df3 = pd.read_csv('sorted_poslemma.csv', encoding='UTF-8', sep="\t")
-    merged_df=sorted_df1.merge(sorted_df2, on='Teilnehmer').merge(sorted_df3, on='Teilnehmer')
-    res = merged_df.to_json(orient="records")
+    # merged_df=sorted_df1.merge(sorted_df2, on='Teilnehmer').merge(sorted_df3, on='Teilnehmer')
+    # merged_df.to_csv('merged_df.csv', encoding='utf-8', sep="\t")
+    res = sorted_df3.to_json(orient="records")
     return res
 
 @app.route("/labelanswers", methods=['POST'])

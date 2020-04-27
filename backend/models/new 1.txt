@@ -1,0 +1,1 @@
+&& (x._jarodist >=(this.spellingSimilarity/100)) && ( x._overlap >=(this.POSLemmaOverlap/100))))
